@@ -1,6 +1,7 @@
 package com.woldt.processors;
 
 import java.io.File;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -22,12 +23,17 @@ public abstract class AbstractProcessor {
 	@Value("${threadCount}")
 	private int threadCount;
 
+	abstract protected String getName();
+
 	abstract protected List<File> getFiles();
 
 	abstract protected Callable<Void> getFileProcessorRunner(final BlockingQueue<File> fileQueue);
 
 	public ProcessorResult process() {
 		final ProcessorResult result = new ProcessorResult();
+		result.setProcessorName(getName());
+		result.setStartTimeInMillis(System.currentTimeMillis());
+		result.setStartTime(Instant.now());
 
 		final BlockingQueue<File> fileQueue = new LinkedBlockingQueue<>(getFiles());
 		final ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
@@ -47,6 +53,8 @@ public abstract class AbstractProcessor {
 			}
 		}
 
-		return null;
+		result.setEndTimeInMillis(System.currentTimeMillis());
+		result.setEndTime(Instant.now());
+		return result;
 	}
 }

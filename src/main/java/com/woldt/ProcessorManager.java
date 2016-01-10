@@ -26,5 +26,9 @@ public class ProcessorManager {
 		for (final AbstractProcessor processor : processors) {
 			results.add(processor.process());
 		}
+
+		for (final ProcessorResult result : results) {
+			LOGGER.info(result);
+		}
 	}
 }

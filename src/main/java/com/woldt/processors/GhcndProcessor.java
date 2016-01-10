@@ -42,4 +42,9 @@ public class GhcndProcessor extends AbstractProcessor {
 	protected Callable<Void> getFileProcessorRunner(BlockingQueue<File> fileQueue) {
 		return new GhcndRunner(fileQueue, new File(outputFilePath));
 	}
+
+	@Override
+	protected String getName() {
+		return "Ghcnd Processor";
+	}
 }
